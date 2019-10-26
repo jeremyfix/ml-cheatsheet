@@ -13,8 +13,6 @@
 \usepackage{multicol}
 \usepackage{amsmath}
 \usepackage{amsfonts}
-\usepackage{tikz}
-\usetikzlibrary{decorations.pathmorphing}
 \usepackage{amsmath,amssymb}
 
 \usepackage{colortbl}
@@ -37,22 +35,7 @@
 
 \DeclareMathOperator{\argmin}{argmin}
 \DeclareMathOperator{\argmax}{argmax}
-
-\newcommand\mybox[2]{
-	\begin{tikzpicture}
-		\node [mybox] (box){%
-				\begin{minipage}{0.3\textwidth}
-					#2
-				\end{minipage}
-			};
-		\node[fancytitle, right=10pt] at (box.north west) {#1};
-	\end{tikzpicture}
-}
-
-\tikzstyle{mybox} = [draw=black, fill=white, very thick,
-rectangle, rounded corners, inner sep=10pt, inner ysep=10pt]
-\tikzstyle{fancytitle} =[fill=black, text=white, font=\bfseries]
-
+\DeclareUnicodeCharacter{2716}{✖}
 \begin{document}
 
 \begin{center}{\huge{\textbf{Support Vector Machines cheatsheet}}}\\
@@ -60,61 +43,66 @@ rectangle, rounded corners, inner sep=10pt, inner ysep=10pt]
 \end{center}
 \begin{multicols*}{3}
 
+\section*{Kernels}
+%------------ Kernels ---------------
+The separator reads
+\begin{align*}
+	h_{w, b}(x) = \sum_i w_i k(x_i, x) + b
+\end{align*}
+\begin{center}
+	\begin{tabular}{lp{5cm} c}
+		\textit{Linear} & $k(x, x') = <x, x'>$ \\
+		\hline
+		\textit{RBF} & $k_\sigma(x, x') = \exp(-\frac{\|x - x'\|^2}{2\sigma^2})$ \\ 
+		\hline
+		\textit{Polynomial} & $k_{\gamma, c, d}(x, x') = (\gamma <x, x'> + c)^d$ \\ 
+	\end{tabular}
+\end{center}
 
-	%------------ Kernels ---------------
-	\mybox{Kernels}{
-		The separator reads
-		\begin{align*}
-			h_{w, b}(x) = \sum_i w_i k(x_i, x) + b
-		\end{align*}
-		\begin{center}
-			\begin{tabular}{lp{5cm} c}
-				\textit{Linear} & $k(x, x') = <x, x'>$ \\
-				\hline
-				\textit{RBF} & $k_\sigma(x, x') = \exp(-\frac{\|x - x'\|^2}{2\sigma^2})$ \\ 
-				\hline
-				\textit{Polynomial} & $k_{\gamma, c, d}(x, x') = (\gamma <x, x'> + c)^d$ \\ 
-			\end{tabular}
-		\end{center}
-	}
-	%------------ C-SVC ---------------------
-	\mybox{Classification SVM : C-SVC}{
-		Primal optimization problem:
+\section*{Classification SVM : C-SVC}
+%------------ C-SVC ---------------------
+Primal optimization problem:
+\begin{flalign*}
+	\underset{w, b \xi}{\argmin}& \frac{1}{2} \|w\|^2 + C \mathbf{1}^T \xi\\
+	\mbox{subject to}& \left\{\begin{array}{ll} 
+			y_i h_{w, b}(x_i) \geq 1 - \xi_i &,  \forall (x_i, y_i) \in S \\
+			\xi_i \geq 0&, \forall i
+	\end{array}\right.
+		\end{flalign*} 
+		Dual optimization problem:
 		\begin{flalign*}
-			\underset{w, b \xi}{\argmin}& \frac{1}{2} \|w\|^2 + C \mathbf{1}^T \xi\\
+			\underset{\alpha}{\argmin}& \frac{1}{2} \alpha^T Q \alpha - \mathbf{1}^T \alpha\\
 			\mbox{subject to}& \left\{\begin{array}{ll} 
-					y_i h_{w, b}(x_i) \geq 1 - \xi_i &,  \forall (x_i, y_i) \in S \\
-					\xi_i \geq 0&, \forall i
-			\end{array}\right.
+					y^T \alpha = 0\\
+					0 \leq \alpha_i \leq C, \forall i
+			\end{array}\right.\\
+			Q_{i,j} = y_i y_j k(x_i, x_j)
 				\end{flalign*} 
-				Dual optimization problem:
-				\begin{flalign*}
-					\underset{\alpha}{\argmin}& \frac{1}{2} \alpha^T Q \alpha - \mathbf{1}^T \alpha\\
-					\mbox{subject to}& \left\{\begin{array}{ll} 
-							y^T \alpha = 0\\
-							0 \leq \alpha_i \leq C, \forall i
-					\end{array}\right.
-				\end{flalign*} 
-						The optimal separator reads :
-						\begin{align*}
-							h(x) = \sum_i \alpha_i y_i k(x_i, x) + b
-						\end{align*}
-						For the optimal separator, we have either :
-						\begin{itemize}
-							\item $\alpha_i = 0$ for \textbf{non support vector} $x_i$, the associated sample does not contribute to the definition of the separating hyperplane,
-							\item $0 < \alpha_i < C$ for \textbf{support vectors} $x_i$ just on the margin. These samples are associated with $\xi_i = 0$ and $y_i h_{w, b}(x_i) = 1$  
-							\item $\alpha_i = C$ for \textbf{support vectors} $x_i$ which involve non null slack variables; they are "on the wrong side" of the margin. These samples are associated with $\xi_i > 0$ and $y_i h_{w, b}(x_i) = 1 - \xi_i$ 
-						\end{itemize}	
-					}
+				The optimal separator reads :
+				\begin{align*}
+					h(x) = \sum_i \alpha_i y_i k(x_i, x) + b
+				\end{align*}
+				For the optimal separator, we have either :
+				\begin{itemize}
+					\item $\alpha_i = 0$ for \textbf{non support vector} $x_i$, the associated sample does not contribute to the definition of the separating hyperplane,
+					\item $0 < \alpha_i < C$ for \textbf{support vectors} $x_i$ just on the margin. These samples are associated with $\xi_i = 0$ and $y_i h_{w, b}(x_i) = 1$  
+					\item $\alpha_i = C$ for \textbf{support vectors} $x_i$ which involve non null slack variables; they are "on the wrong side" of the margin. These samples are associated with $\xi_i > 0$ and $y_i h_{w, b}(x_i) = 1 - \xi_i$ 
+				\end{itemize}	
+				\vfill\null
+				\columnbreak
 
-	%------------ C-SVC ---------------------
-	\mybox{C-SVC examples}{
-	
+				On the figure below, we see a bi-class problem solved with a C-SVC with C=1.
+				The positive samples are drawn with a white dot; The negative samples with a gray dot.\\
 
-	}
+				\includegraphics[width=\columnwidth]{csvc001.png}
+
+				The support vectors are the samples indicated with a cross. A red cross indicates the samples on the margin. A black cross indicates the samples with non null slack variables $\xi$.
+			
+			%------------ C-SVC ---------------------
+			\section*{C-SVC examples}
 
 
 		\end{multicols*}
-				\end{document}
-				Contact GitHub API Training Shop Blog About
-				© 2016 GitHub, Inc. Terms Privacy Security Status Hel
+		\end{document}
+		Contact GitHub API Training Shop Blog About
+		© 2016 GitHub, Inc. Terms Privacy Security Status Hel
