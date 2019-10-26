@@ -44,7 +44,6 @@
 \begin{multicols*}{3}
 
 \section*{Kernels}
-%------------ Kernels ---------------
 The separator reads
 \begin{align*}
 	h_{w, b}(x) = \sum_i w_i k(x_i, x) + b
@@ -60,7 +59,6 @@ The separator reads
 \end{center}
 
 \section*{Classification SVM : C-SVC}
-%------------ C-SVC ---------------------
 Primal optimization problem:
 \begin{flalign*}
 	\underset{w, b \xi}{\argmin}& \frac{1}{2} \|w\|^2 + C \mathbf{1}^T \xi\\
@@ -96,13 +94,10 @@ Primal optimization problem:
 
 				\includegraphics[width=\columnwidth]{csvc001.png}
 
-				The support vectors are the samples indicated with a cross. A red cross indicates the samples on the margin. A black cross indicates the samples with non null slack variables $\xi$.
+				The support vectors are the samples indicated with a cross. A red cross indicates the samples on the margin. A black cross indicates the samples with non null slack variables $\xi$. Only the support vectors (i.e. the samples indicated with a cross) contribute to the definition of the separator.
 			
-			%------------ C-SVC ---------------------
-			\section*{C-SVC examples}
+\section*{C-SVC examples}
 
 
 		\end{multicols*}
 		\end{document}
-		Contact GitHub API Training Shop Blog About
-		© 2016 GitHub, Inc. Terms Privacy Security Status Hel
