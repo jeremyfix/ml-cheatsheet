@@ -8,7 +8,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass{article}
-\usepackage[landscape]{geometry}
+\usepackage[top=0.5cm, bottom=0.5cm, left=0.5cm, right=0.5cm,landscape]{geometry}
 \usepackage{url}
 \usepackage{multicol}
 \usepackage{amsmath}
@@ -23,15 +23,8 @@
 
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
-
-\advance\topmargin-.8in
-\advance\textheight3in
-\advance\textwidth3in
-\advance\oddsidemargin-1.5in
-\advance\evensidemargin-1.5in
 \parindent0pt
 \parskip2pt
-\newcommand{\hr}{\centerline{\rule{3.5in}{1pt}}}
 
 \DeclareMathOperator{\argmin}{argmin}
 \DeclareMathOperator{\argmax}{argmax}
@@ -98,22 +91,46 @@ The support vectors are the samples indicated with a cross. A red cross indicate
 			
 \section*{C-SVC examples}
 
-\begin{multicols}{2}
-	\null400 samples, noise=0.25\\
+\begin{minipage}{0.5\columnwidth}
+	400 samples, noise=0.25\\
 	$C=0.1 ,\sigma=0.4$\\
-	With a small C, a lot of vectors can be support vectors\vfill  
+	With a small C, a lot of vectors can be support vectors
+	\columnbreak
+\end{minipage}
+\begin{minipage}{0.4\columnwidth}
 	\includegraphics[width=\columnwidth]{csvc003.png}
-\end{multicols}
+\end{minipage}
 
-\begin{multicols}{2}
-	\null100 samples, noise=0.1\\
+\begin{minipage}{0.5\columnwidth}
+	100 samples, noise=0.1\\
 	$C=1000 ,\sigma=0.4$\\
-	It costs a lot to add slack variables. The separator is really stuck to the data.\vfill  
+	It costs a lot to add slack variables. The separator is really stuck to the data.\columnbreak  
+\end{minipage}
+\begin{minipage}{0.4\columnwidth}
 \includegraphics[width=\columnwidth]{csvc002.png}
-\end{multicols}
+\end{minipage}
 
+\columnbreak
 \section*{Classification SVM : Nu-SVC}
 
+Primal optimization problem:
+\begin{flalign*}
+	\underset{w, b, \xi, \rho}{\argmin}& \frac{1}{2} \|w\|^2 - \nu \rho + \frac{1}{|S|}\mathbf{1}^T \xi\\
+	\mbox{subject to}& \left\{\begin{array}{ll} 
+			y_i h_{w, b}(x_i) \geq \rho - \xi_i &,  \forall (x_i, y_i) \in S \\
+			\rho \geq 0 &\\
+			\xi_i \geq 0&, \forall i
+\end{array}\right.
+\end{flalign*} 
+Dual optimization problem:
+\begin{flalign*}
+	\underset{w, b, \xi, \rho}{\argmin}& \frac{1}{2} \alpha^T Q \alpha  \\
+	\mbox{subject to}& \left\{\begin{array}{ll} 
+			y^T \alpha = 0& \\
+			0 \leq \alpha_i \leq \frac{1}{|S|},& \forall i\\
+			\mathbf{1}^T \alpha = \nu & 
+\end{array}\right.
+\end{flalign*} 
 
 
 \end{multicols*}
