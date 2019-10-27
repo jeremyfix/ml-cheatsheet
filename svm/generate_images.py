@@ -10,25 +10,18 @@ import svm_tools
 import plot_tools
 
 
-def train_classifier(build_clf,
-                     n_samples):
-    X, y = sklearn.datasets.make_moons(n_samples=n_samples, noise=0.1)
-
-    # Let us learn a linear C-SVC
-    classifier = build_clf()
-    classifier.fit(X, y)
-
-    return classifier, (X, y)
-
-
-def example001():
-    build_clf = lambda: sklearn.svm.SVC(C=1,
-                                        kernel='rbf', gamma=1/(2.0 * 0.4**2),
-                                        tol=1e-5,
-                                        decision_function_shape='ovo')
-    clf, (X, y) = train_classifier(build_clf, 100)
+def exampleCSVC_moon(n_samples, C, noise, sigma, filename):
+    X, y = sklearn.datasets.make_moons(n_samples=n_samples,
+                                       noise=noise)
+    gamma = 1./(2.0 * sigma**2)
+    clf = sklearn.svm.SVC(C=C,
+                          kernel='rbf', gamma=gamma,
+                          tol=1e-5,
+                          decision_function_shape='ovo')
+    clf.fit(X, y)
     sep, desc, info = svm_tools.svc_ovo_separators(clf,
-                                                   svm_tools.gaussian_kernel(clf.gamma), X)
+                                                   svm_tools.gaussian_kernel(gamma),
+                                                   X)
     fig = plt.figure(figsize=(12, 10))
 
     xlim = [-1.5, 2.5]
@@ -38,16 +31,19 @@ def example001():
     ax.set_xlim(xlim)
     ax.set_ylim(ylim)
     ax.set_aspect('equal')
-    plot_tools.plot_svc_samples(ax, desc, info, X[:100], y[:100],
+    plot_tools.plot_svc_samples(ax, desc, info, X, y,
                                 '0 vs 1', 'white', 'gray',
                                 'black', 'red')
     plot_tools.plot_svc_separation(ax, sep, info, '0 vs 1', xlim, ylim)
     plot_tools.plot_svc_partition(ax, clf,
                                   xlim, ylim,
                                   [(.8, .8, 1.), (.8, 1., .8)])
-    plt.savefig('csvc001.png', bbox_inches='tight')
+    plt.savefig(filename, bbox_inches='tight')
     plt.show()
 
 
+
 if __name__ == '__main__':
-    example001()
+    exampleCSVC_moon(100, 1, 0.1, 0.4, "csvc001.png")
+    exampleCSVC_moon(100, 1000, 0.25, 0.4, "csvc002.png")
+    exampleCSVC_moon(400, 0.1, 0.25, 0.4, "csvc003.png")
