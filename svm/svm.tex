@@ -94,10 +94,27 @@ Primal optimization problem:
 
 				\includegraphics[width=\columnwidth]{csvc001.png}
 
-				The support vectors are the samples indicated with a cross. A red cross indicates the samples on the margin. A black cross indicates the samples with non null slack variables $\xi$. Only the support vectors (i.e. the samples indicated with a cross) contribute to the definition of the separator.
+The support vectors are the samples indicated with a cross. A red cross indicates the samples on the margin. A black cross indicates the samples with non null slack variables $\xi$. Only the support vectors (i.e. the samples indicated with a cross) contribute to the definition of the separator.
 			
 \section*{C-SVC examples}
 
+\begin{multicols}{2}
+	\null400 samples, noise=0.25\\
+	$C=0.1 ,\sigma=0.4$\\
+	With a small C, a lot of vectors can be support vectors\vfill  
+	\includegraphics[width=\columnwidth]{csvc003.png}
+\end{multicols}
 
-		\end{multicols*}
-		\end{document}
+\begin{multicols}{2}
+	\null100 samples, noise=0.1\\
+	$C=1000 ,\sigma=0.4$\\
+	It costs a lot to add slack variables. The separator is really stuck to the data.\vfill  
+\includegraphics[width=\columnwidth]{csvc002.png}
+\end{multicols}
+
+\section*{Classification SVM : Nu-SVC}
+
+
+
+\end{multicols*}
+\end{document}
