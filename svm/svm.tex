@@ -71,11 +71,12 @@ Primal optimization problem:
 				\columnbreak
 
 				On the figure below, we see a bi-class problem solved with a C-SVC with C=1.
-				The positive samples are drawn with a white dot; The negative samples with a gray dot.\\
+				The positive samples are drawn with a white dot; The negative samples with a gray dot. 100 samples were used for training.\\
+		\begin{center}
+				\includegraphics[width=0.6\columnwidth]{csvc005.png}
+			\end{center}
 
-				\includegraphics[width=\columnwidth]{csvc001.png}
-
-The support vectors are the samples indicated with a cross. A red cross indicates the samples on the margin. A black cross indicates the samples with non null slack variables $\xi$. Only the support vectors (i.e. the samples indicated with a cross) contribute to the definition of the separator.
+			The support vectors are the samples indicated with a cross. A red cross indicates the samples on the margin ($\xi_i =0$). A black cross indicates the samples with non null slack variables ($\xi_i > 0$). Only the support vectors (i.e. the samples indicated with a cross) contribute to the definition of the separator.
 			
 \section*{C-SVC examples}
 
@@ -90,7 +91,7 @@ The support vectors are the samples indicated with a cross. A red cross indicate
 \end{minipage}
 
 \begin{minipage}{0.5\columnwidth}
-	100 samples, noise=0.1\\
+	100 samples, noise=0.25\\
 	$C=1000 ,\sigma=0.4$\\
 	It costs a lot to add slack variables. The separator is really stuck to the data.\columnbreak  
 \end{minipage}
@@ -99,7 +100,7 @@ The support vectors are the samples indicated with a cross. A red cross indicate
 \end{minipage}
 
 \columnbreak
-\section*{Classification SVM : Nu-SVC}
+\section*{Classification SVM : $\nu$-SVC}
 
 Primal optimization problem:
 \begin{flalign*}
@@ -120,6 +121,42 @@ Dual optimization problem:
 \end{array}\right.
 \end{flalign*} 
 
+\section*{$\nu$-SVC examples}
+\begin{minipage}{0.5\columnwidth}
+	100 samples, noise=0.25\\
+	$\nu=1000 ,\sigma=0.4$\\
+	Only $10\%$ of the samples are support vectors.\columnbreak  
+\end{minipage}
+\begin{minipage}{0.4\columnwidth}
+\includegraphics[width=\columnwidth]{nusvc001.png}
+\end{minipage}
+
+\begin{minipage}{0.5\columnwidth}
+	100 samples, noise=0.25\\
+	$\nu=20\% ,\sigma=0.4$\\
+	More samples contribute to the decision boundary..\columnbreak  
+\end{minipage}
+\begin{minipage}{0.4\columnwidth}
+\includegraphics[width=\columnwidth]{nusvc002.png}
+\end{minipage}
+
+\begin{minipage}{0.5\columnwidth}
+	100 samples, noise=0.25\\
+	$\nu=90\% ,\sigma=0.4$\\
+	Most of the samples are support vectors. \columnbreak  
+\end{minipage}
+\begin{minipage}{0.4\columnwidth}
+\includegraphics[width=\columnwidth]{nusvc003.png}
+\end{minipage}
+
+\begin{minipage}{0.5\columnwidth}
+	100 samples, noise=0.25\\
+	$\nu=20\% ,\sigma=0.2$\\
+	Only 20\% of the samples are support vectors but the $\sigma$ is so small that the decision wiggles around the samples. \columnbreak  
+\end{minipage}
+\begin{minipage}{0.4\columnwidth}
+\includegraphics[width=\columnwidth]{nusvc004.png}
+\end{minipage}
 
 \end{multicols*}
 \end{document}
